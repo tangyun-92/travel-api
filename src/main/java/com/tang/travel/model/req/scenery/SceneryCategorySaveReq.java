@@ -21,7 +21,7 @@ public class SceneryCategorySaveReq {
     private Integer sort;
 
     @ApiModelProperty(hidden = true)
-    private String isDel = "1";
+    private String isDel = "0";
 
     public Integer getId() {
         return id;

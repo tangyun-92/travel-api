@@ -38,7 +38,7 @@ public class SceneryCategoryServiceImpl implements SceneryCategoryService {
         SceneryCategoryExample.Criteria criteria = sceneryCategoryExample.createCriteria();
 
         // 查询所有未删除的数据
-        criteria.andIsDelEqualTo("1");
+        criteria.andIsDelEqualTo("0");
         // 分类名称模糊查询
         if (!ObjectUtils.isEmpty(req.getName())) {
             criteria.andNameLike('%' + req.getName() + '%');
@@ -110,7 +110,7 @@ public class SceneryCategoryServiceImpl implements SceneryCategoryService {
         SceneryCategory sceneryCategoryDB = sceneryCategoryMapper.selectByPrimaryKey(id);
         System.out.println(sceneryCategoryDB);
         if (!ObjectUtils.isEmpty(sceneryCategoryDB)) {
-            sceneryCategoryDB.setIsDel("0");
+            sceneryCategoryDB.setIsDel("1");
             sceneryCategoryMapper.updateByPrimaryKey(sceneryCategoryDB);
         }
     }
