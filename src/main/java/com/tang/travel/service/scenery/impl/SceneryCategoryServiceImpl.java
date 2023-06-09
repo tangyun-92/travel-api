@@ -34,7 +34,7 @@ public class SceneryCategoryServiceImpl implements SceneryCategoryService {
         SceneryCategoryExample.Criteria criteria = sceneryCategoryExample.createCriteria();
 
         // 查询所有未删除的数据
-        criteria.andIsDelLike("1");
+        criteria.andIsDelEqualTo("1");
         // 分类名称模糊查询
         if (!ObjectUtils.isEmpty(req.getName())) {
             criteria.andNameLike('%' + req.getName() + '%');
