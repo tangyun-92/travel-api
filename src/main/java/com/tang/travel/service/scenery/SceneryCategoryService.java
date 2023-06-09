@@ -1,9 +1,7 @@
 package com.tang.travel.service.scenery;
 
-import com.tang.travel.model.pojo.SceneryCategory;
-
-import java.util.List;
+import com.tang.travel.util.PageBean;
 
 public interface SceneryCategoryService {
-    List<SceneryCategory> list();
+    PageBean list();
 }
