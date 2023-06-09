@@ -1,12 +1,16 @@
 package com.tang.travel.service.scenery.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.tang.travel.exception.BusinessException;
+import com.tang.travel.exception.BusinessExceptionEnum;
 import com.tang.travel.model.dao.SceneryCategoryMapper;
 import com.tang.travel.model.pojo.SceneryCategory;
 import com.tang.travel.model.pojo.SceneryCategoryExample;
 import com.tang.travel.model.req.scenery.SceneryCategoryQueryReq;
+import com.tang.travel.model.req.scenery.SceneryCategorySaveReq;
 import com.tang.travel.model.resp.scenery.SceneryCategoryListForCustomerResp;
 import com.tang.travel.service.scenery.SceneryCategoryService;
+import com.tang.travel.util.CopyUtil;
 import com.tang.travel.util.PageBean;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -72,6 +76,60 @@ public class SceneryCategoryServiceImpl implements SceneryCategoryService {
                 sceneryCategoryList.add(sceneryCategoryListForCustomerResp);
                 recursivelyFindCategories(sceneryCategoryListForCustomerResp.getChildren(), sceneryCategoryListForCustomerResp.getId());
             }
+        }
+    }
+
+    /**
+     * 新增编辑景点分类
+     * @param req
+     */
+    @Override
+    public void save(SceneryCategorySaveReq req) {
+        SceneryCategory sceneryCategory = CopyUtil.copy(req, SceneryCategory.class);
+        if (ObjectUtils.isEmpty(req.getId())) {
+            // 新增
+            SceneryCategory sceneryCategoryDB = selectByName(req.getName());
+            if (ObjectUtils.isEmpty(sceneryCategoryDB)) {
+                sceneryCategoryMapper.insertSelective(sceneryCategory);
+            } else {
+                // 分类名称已存在
+                throw new BusinessException(BusinessExceptionEnum.CATEGORY_NAME_EXIST);
+            }
+        } else {
+            // 更新
+            sceneryCategoryMapper.updateByPrimaryKeySelective(sceneryCategory);
+        }
+    }
+
+    /**
+     * 删除景点分类 - 逻辑删除
+     * @param id
+     */
+    @Override
+    public void delete(Integer id) {
+        SceneryCategory sceneryCategoryDB = sceneryCategoryMapper.selectByPrimaryKey(id);
+        System.out.println(sceneryCategoryDB);
+        if (!ObjectUtils.isEmpty(sceneryCategoryDB)) {
+            sceneryCategoryDB.setIsDel("0");
+            sceneryCategoryMapper.updateByPrimaryKey(sceneryCategoryDB);
+        }
+    }
+
+    /**
+     * 根据分类名称查询分类详细信息
+     * @param name
+     * @return
+     */
+    public SceneryCategory selectByName(String name) {
+        SceneryCategoryExample sceneryCategoryExample = new SceneryCategoryExample();
+        SceneryCategoryExample.Criteria criteria = sceneryCategoryExample.createCriteria();
+        criteria.andNameEqualTo(name);
+
+        List<SceneryCategory> list = sceneryCategoryMapper.selectByExample(sceneryCategoryExample);
+        if (CollectionUtils.isEmpty(list)) {
+            return null;
+        } else {
+            return list.get(0);
         }
     }
 }

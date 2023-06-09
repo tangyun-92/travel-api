@@ -4,7 +4,9 @@ package com.tang.travel.exception;
  * 异常枚举
  */
 public enum BusinessExceptionEnum {
-    PARAM_ERROR("参数错误");
+    REQUEST_PARAM_ERROR("参数错误"),
+    SYSTEM_ERROR("系统异常，请联系管理员"),
+    CATEGORY_NAME_EXIST("分类名称已存在");
 
     private String msg;
 
