@@ -93,7 +93,7 @@ public class SceneryCategoryServiceImpl implements SceneryCategoryService {
                 sceneryCategoryMapper.insertSelective(sceneryCategory);
             } else {
                 // 分类名称已存在
-                throw new BusinessException(BusinessExceptionEnum.CATEGORY_NAME_EXIST);
+                throw new BusinessException(BusinessExceptionEnum.NAME_EXIST);
             }
         } else {
             // 更新
