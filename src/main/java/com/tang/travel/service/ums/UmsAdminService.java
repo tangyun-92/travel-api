@@ -2,8 +2,10 @@ package com.tang.travel.service.ums;
 
 import com.tang.travel.mbg.model.UmsAdmin;
 import com.tang.travel.mbg.model.UmsPermission;
+import com.tang.travel.model.req.ums.UmsAdminListReq;
 import com.tang.travel.model.req.ums.UmsAdminLoginReq;
 import com.tang.travel.model.req.ums.UmsAdminRegisterReq;
+import com.tang.travel.util.PageBean;
 
 import java.util.List;
 
@@ -15,4 +17,6 @@ public interface UmsAdminService {
     List<UmsPermission> getPermissionList(Long adminId);
 
     String login(UmsAdminLoginReq req);
+
+    PageBean list(UmsAdminListReq req);
 }

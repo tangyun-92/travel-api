@@ -1,5 +1,6 @@
 package com.tang.travel.service.ums.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.tang.travel.exception.BusinessException;
 import com.tang.travel.exception.BusinessExceptionEnum;
 import com.tang.travel.mbg.mapper.UmsAdminMapper;
@@ -7,11 +8,14 @@ import com.tang.travel.mbg.model.UmsAdmin;
 import com.tang.travel.mbg.model.UmsAdminExample;
 import com.tang.travel.mbg.model.UmsPermission;
 import com.tang.travel.model.dao.UmsPermissionMapperDao;
+import com.tang.travel.model.req.ums.UmsAdminListReq;
 import com.tang.travel.model.req.ums.UmsAdminLoginReq;
 import com.tang.travel.model.req.ums.UmsAdminRegisterReq;
+import com.tang.travel.model.resp.ums.UmsAdminListResp;
 import com.tang.travel.service.ums.UmsAdminService;
 import com.tang.travel.util.CopyUtil;
 import com.tang.travel.util.JwtTokenUtil;
+import com.tang.travel.util.PageBean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -92,8 +96,6 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 
     /**
      * 后台-登录
-     * @param username
-     * @param password
      * @return
      */
     @Override
@@ -116,5 +118,30 @@ public class UmsAdminServiceImpl implements UmsAdminService {
             throw new BusinessException(BusinessExceptionEnum.WRONG_PASSWORD);
         }
         return token;
+    }
+
+    /**
+     * 后台-获取用户列表
+     * @param req
+     * @return
+     */
+    @Override
+    public PageBean list(UmsAdminListReq req) {
+        UmsAdminExample umsAdminExample = new UmsAdminExample();
+        UmsAdminExample.Criteria criteria = umsAdminExample.createCriteria();
+        // 用户名与昵称模糊查询
+        if (!ObjectUtils.isEmpty(req.getUsername())) {
+            criteria.andUsernameLike('%' + req.getUsername() + '%');
+        }
+        if (!ObjectUtils.isEmpty(req.getNickName())) {
+            criteria.andNickNameLike('%' + req.getNickName() + '%');
+        }
+
+        PageHelper.startPage(req.getCurrent(), req.getPageSize());
+
+        List<UmsAdmin> umsAdminList = umsAdminMapper.selectByExample(umsAdminExample);
+        // 列表复制
+        List<UmsAdminListResp> list = CopyUtil.copyList(umsAdminList, UmsAdminListResp.class);
+        return new PageBean<>(list);
     }
 }

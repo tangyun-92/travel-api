@@ -2,12 +2,15 @@ package com.tang.travel.controller.ums;
 
 import com.tang.travel.common.ApiRestResponse;
 import com.tang.travel.exception.BusinessExceptionEnum;
+import com.tang.travel.model.req.ums.UmsAdminListReq;
 import com.tang.travel.model.req.ums.UmsAdminLoginReq;
 import com.tang.travel.model.req.ums.UmsAdminRegisterReq;
 import com.tang.travel.service.ums.UmsAdminService;
+import com.tang.travel.util.PageBean;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -22,7 +25,7 @@ public class UmsAdminController {
 
     @Resource
     UmsAdminService umsAdminService;
-    @Value("Bearer")
+    @Value("${jwt.tokenHead}")
     private String tokenHead;
 
     @ApiOperation(value = "用户注册")
@@ -50,5 +53,13 @@ public class UmsAdminController {
         tokenMap.put("token", token);
         tokenMap.put("tokenHead", tokenHead);
         return ApiRestResponse.success(tokenMap);
+    }
+
+    @ApiOperation("后台-用户列表")
+    @GetMapping("/user/list")
+    @PreAuthorize("hasAuthority('ums:admin:read')")
+    public ApiRestResponse getUserList(UmsAdminListReq req) {
+        PageBean list = umsAdminService.list(req);
+        return ApiRestResponse.success(list);
     }
 }

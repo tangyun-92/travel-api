@@ -3,6 +3,7 @@ package com.tang.travel.exception;
 import com.tang.travel.common.ApiRestResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -56,6 +57,18 @@ public class GlobalExceptionHandler {
         apiRestResponse.setSuccess(false);
         apiRestResponse.setMessage("系统出现异常，请联系管理员");
         return apiRestResponse;
+    }
+
+    /**
+     * 权限不足异常捕获，因为全局异常会比自定的提前捕捉到，因此直接在这里处理
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(value = AccessDeniedException.class)
+    @ResponseBody
+    public ApiRestResponse handleAccessRE(AccessDeniedException e) {
+        LOG.error("权限不足");
+        return ApiRestResponse.error(BusinessExceptionEnum.NOT_AUTH);
     }
 
 }
