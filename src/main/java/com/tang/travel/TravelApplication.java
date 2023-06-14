@@ -12,7 +12,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @ComponentScan("com.tang")
 @SpringBootApplication
-@MapperScan("com.tang.travel.model.dao")
+@MapperScan({"com.tang.travel.model.dao", "com.tang.travel.mbg.mapper"})
 @EnableSwagger2
 @EnableCaching
 public class TravelApplication {

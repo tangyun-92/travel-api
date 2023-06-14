@@ -30,7 +30,7 @@
 
         <!-- Model类的位置 -->
         <javaModelGenerator targetProject="src\main\java"
-                            targetPackage="com.tang.travel.model.pojo">
+                            targetPackage="com.tang.travel.mbg.model">
             <!-- 是否允许子包，即targetPackage.schemaName.tableName -->
             <property name="enableSubPackages" value="true" />
             <!-- 是否对类CHAR类型的列的数据进行trim操作 -->
@@ -41,15 +41,15 @@
 
         <!-- mapper xml的位置 -->
         <sqlMapGenerator targetProject="src\main\resources"
-                         targetPackage="mapper">
+                         targetPackage="mbg.mapper">
             <property name="enableSubPackages" value="true" />
         </sqlMapGenerator>
 
         <!-- Dao类的位置 -->
-        <javaClientGenerator targetPackage="com.tang.travel.model.dao" targetProject="src/main/java" type="XMLMAPPER">
+        <javaClientGenerator targetPackage="com.tang.travel.mbg.mapper" targetProject="src/main/java" type="XMLMAPPER">
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
-        <table tableName="scenery_category"/>
+        <table tableName="ums_admin"/>
     </context>
 </generatorConfiguration>
