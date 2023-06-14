@@ -7,9 +7,16 @@ import com.tang.travel.mbg.model.UmsAdmin;
 import com.tang.travel.mbg.model.UmsAdminExample;
 import com.tang.travel.mbg.model.UmsPermission;
 import com.tang.travel.model.dao.UmsPermissionMapperDao;
+import com.tang.travel.model.req.ums.UmsAdminLoginReq;
 import com.tang.travel.model.req.ums.UmsAdminRegisterReq;
 import com.tang.travel.service.ums.UmsAdminService;
 import com.tang.travel.util.CopyUtil;
+import com.tang.travel.util.JwtTokenUtil;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -27,7 +34,11 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     @Resource
     UmsPermissionMapperDao umsPermissionMapperDao;
     @Resource
+    UserDetailsService userDetailsService;
+    @Resource
     private PasswordEncoder passwordEncoder;
+    @Resource
+    private JwtTokenUtil jwtTokenUtil;
 
     /**
      * 后台-根据用户名查询指定用户详细信息
@@ -77,5 +88,33 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     @Override
     public List<UmsPermission> getPermissionList(Long adminId) {
         return umsPermissionMapperDao.getPermissionList(adminId);
+    }
+
+    /**
+     * 后台-登录
+     * @param username
+     * @param password
+     * @return
+     */
+    @Override
+    public String login(UmsAdminLoginReq req) {
+        String token = null;
+        try {
+            UserDetails userDetails = userDetailsService.loadUserByUsername(req.getUsername());
+            if (!passwordEncoder.matches(req.getPassword(), userDetails.getPassword())) {
+                throw new BusinessException(BusinessExceptionEnum.WRONG_PASSWORD);
+            }
+            // 更新最后一次登录时间
+            UmsAdmin umsAdminDB = getAdminByUsername(req.getUsername());
+            umsAdminDB.setLoginTime(new Date());
+            umsAdminMapper.updateByPrimaryKeySelective(umsAdminDB);
+
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            token = jwtTokenUtil.generateToken(userDetails);
+        } catch (AuthenticationException e) {
+            throw new BusinessException(BusinessExceptionEnum.WRONG_PASSWORD);
+        }
+        return token;
     }
 }
