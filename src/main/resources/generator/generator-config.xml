@@ -41,7 +41,7 @@
 
         <!-- mapper xml的位置 -->
         <sqlMapGenerator targetProject="src\main\resources"
-                         targetPackage="mbg.mapper">
+                         targetPackage="com.tang.travel.mbg.mapper">
             <property name="enableSubPackages" value="true" />
         </sqlMapGenerator>
 
@@ -51,5 +51,6 @@
         </javaClientGenerator>
 
         <table tableName="ums_admin"/>
+        <table tableName="ums_permission"/>
     </context>
 </generatorConfiguration>

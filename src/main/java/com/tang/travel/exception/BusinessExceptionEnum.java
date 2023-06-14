@@ -6,6 +6,9 @@ package com.tang.travel.exception;
 public enum BusinessExceptionEnum {
     REQUEST_PARAM_ERROR("参数错误"),
     SYSTEM_ERROR("系统异常，请联系管理员"),
+    TOKEN_LOSE_EFFICACY("暂未登录或token已过期"),
+    NOT_AUTH("没有相关权限，请联系管理员"),
+    WRONG_PASSWORD("用户名或密码错误"),
     NAME_EXIST("该名称已存在");
 
     private String msg;
