@@ -188,26 +188,16 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     @Override
     public void assignRole(Long adminId, List<Long> roleIds) {
         // 删除原有的关系
-        UmsAdminRoleRelation umsAdminRoleRelationList = getRoleListByAdminId(adminId);
-        umsAdminRoleRelationMapper.deleteByPrimaryKey(umsAdminRoleRelationList.getId());
+        umsAdminRoleRelationMapperDao.deleteAdminRoleRelationByAdminId(adminId);
         // 建立新的关系
         if (!CollectionUtils.isEmpty(roleIds)) {
-//            List<UmsAdminRoleRelation> list = new ArrayList<>();
             for (Long roleId: roleIds) {
                 UmsAdminRoleRelation roleRelation = new UmsAdminRoleRelation();
                 roleRelation.setAdminId(adminId);
                 roleRelation.setRoleId(roleId);
                 umsAdminRoleRelationMapper.insert(roleRelation);
             }
-//            umsAdminRoleRelationMapper.insert(list);
         }
     }
 
-    public UmsAdminRoleRelation getRoleListByAdminId(Long adminId) {
-        UmsAdminRoleRelation umsAdminRoleRelation = umsAdminRoleRelationMapperDao.selectRoleListByAdminId(adminId);
-        if (umsAdminRoleRelation != null) {
-            return umsAdminRoleRelation;
-        }
-        return null;
-    }
 }
