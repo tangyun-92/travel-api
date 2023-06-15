@@ -21,10 +21,6 @@ public class UmsAdminListResp {
 
     private Integer status;
 
-    private String roleName;
-
-    private Long roleId;
-
     public Long getId() {
         return id;
     }
@@ -97,22 +93,6 @@ public class UmsAdminListResp {
         this.status = status;
     }
 
-    public String getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
-    }
-
-    public Long getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
-    }
-
     @Override
     public String toString() {
         return "UmsAdminListResp{" +
@@ -125,8 +105,6 @@ public class UmsAdminListResp {
                 ", createTime=" + createTime +
                 ", loginTime=" + loginTime +
                 ", status=" + status +
-                ", roleName='" + roleName + '\'' +
-                ", roleId=" + roleId +
                 '}';
     }
 }

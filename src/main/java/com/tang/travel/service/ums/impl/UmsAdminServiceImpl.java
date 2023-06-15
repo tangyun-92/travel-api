@@ -4,13 +4,17 @@ import com.github.pagehelper.PageHelper;
 import com.tang.travel.exception.BusinessException;
 import com.tang.travel.exception.BusinessExceptionEnum;
 import com.tang.travel.mbg.mapper.UmsAdminMapper;
+import com.tang.travel.mbg.mapper.UmsAdminRoleRelationMapper;
 import com.tang.travel.mbg.model.UmsAdmin;
+import com.tang.travel.mbg.model.UmsAdminRoleRelation;
 import com.tang.travel.mbg.model.UmsPermission;
 import com.tang.travel.model.dao.UmsAdminMapperDao;
+import com.tang.travel.model.dao.UmsAdminRoleRelationMapperDao;
 import com.tang.travel.model.dao.UmsPermissionMapperDao;
 import com.tang.travel.model.req.ums.UmsAdminListReq;
 import com.tang.travel.model.req.ums.UmsAdminLoginReq;
 import com.tang.travel.model.req.ums.UmsAdminRegisterReq;
+import com.tang.travel.model.req.ums.UmsAdminSaveReq;
 import com.tang.travel.model.resp.ums.UmsAdminListResp;
 import com.tang.travel.service.ums.UmsAdminService;
 import com.tang.travel.util.CopyUtil;
@@ -23,6 +27,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
@@ -41,12 +46,17 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     @Resource
     UserDetailsService userDetailsService;
     @Resource
+    UmsAdminRoleRelationMapper umsAdminRoleRelationMapper;
+    @Resource
+    UmsAdminRoleRelationMapperDao umsAdminRoleRelationMapperDao;
+    @Resource
     private PasswordEncoder passwordEncoder;
     @Resource
     private JwtTokenUtil jwtTokenUtil;
 
     /**
      * 后台-根据用户名查询指定用户详细信息
+     *
      * @param username
      * @return
      */
@@ -61,6 +71,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 
     /**
      * 后台-注册
+     *
      * @param req
      */
     @Override
@@ -82,6 +93,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 
     /**
      * 后台-获取用户所有权限
+     *
      * @param adminId
      * @return
      */
@@ -92,6 +104,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 
     /**
      * 后台-登录
+     *
      * @return
      */
     @Override
@@ -118,6 +131,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 
     /**
      * 后台-获取用户列表
+     *
      * @param req
      * @return
      */
@@ -129,5 +143,71 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         return new PageBean<>(umsAdminList);
     }
 
-    public void assignRole() {}
+    /**
+     * 后台-新增/更新用户
+     * @param req
+     */
+    @Override
+    public void saveUser(UmsAdminSaveReq req) {
+        UmsAdmin umsAdmin = CopyUtil.copy(req, UmsAdmin.class);
+        UmsAdmin umsAdminDB = getAdminByUsername(req.getUsername());
+        if (ObjectUtils.isEmpty(req.getId())) {
+            // 新增
+            if (umsAdminDB != null) {
+                throw new BusinessException(BusinessExceptionEnum.NAME_EXIST);
+            }
+            umsAdmin.setCreateTime(new Date());
+            // 设置初始密码为 123456，并加密
+            String encodePassword = passwordEncoder.encode("123456");
+            umsAdmin.setPassword(encodePassword);
+
+            umsAdminMapper.insertSelective(umsAdmin);
+        } else {
+            // 更新
+            if (umsAdminDB != null && !umsAdminDB.getId().equals(req.getId())) {
+                throw new BusinessException(BusinessExceptionEnum.NAME_EXIST);
+            }
+            umsAdminMapper.updateByPrimaryKeySelective(umsAdmin);
+        }
+    }
+
+    /**
+     * 后台-批量删除用户
+     * @param ids
+     */
+    @Override
+    public void deleteUser(Integer[] ids) {
+        umsAdminMapperDao.batchDelete(ids);
+    }
+
+    /**
+     * 分配角色
+     * @param adminId
+     * @param roleIds
+     */
+    @Override
+    public void assignRole(Long adminId, List<Long> roleIds) {
+        // 删除原有的关系
+        UmsAdminRoleRelation umsAdminRoleRelationList = getRoleListByAdminId(adminId);
+        umsAdminRoleRelationMapper.deleteByPrimaryKey(umsAdminRoleRelationList.getId());
+        // 建立新的关系
+        if (!CollectionUtils.isEmpty(roleIds)) {
+//            List<UmsAdminRoleRelation> list = new ArrayList<>();
+            for (Long roleId: roleIds) {
+                UmsAdminRoleRelation roleRelation = new UmsAdminRoleRelation();
+                roleRelation.setAdminId(adminId);
+                roleRelation.setRoleId(roleId);
+                umsAdminRoleRelationMapper.insert(roleRelation);
+            }
+//            umsAdminRoleRelationMapper.insert(list);
+        }
+    }
+
+    public UmsAdminRoleRelation getRoleListByAdminId(Long adminId) {
+        UmsAdminRoleRelation umsAdminRoleRelation = umsAdminRoleRelationMapperDao.selectRoleListByAdminId(adminId);
+        if (umsAdminRoleRelation != null) {
+            return umsAdminRoleRelation;
+        }
+        return null;
+    }
 }

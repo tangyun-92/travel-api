@@ -2,7 +2,9 @@ package com.tang.travel.model.req.ums;
 
 import io.swagger.annotations.ApiModelProperty;
 
-public class UmsAdminListReq {
+import java.io.Serializable;
+
+public class UmsAdminListReq implements Serializable {
 
     @ApiModelProperty(value = "用户名", name = "username", dataType = "String")
     private String username;
@@ -18,7 +20,6 @@ public class UmsAdminListReq {
 
     @ApiModelProperty(value = "每页显示条数", name = "pageSize", dataType = "Integer")
     private Integer pageSize = 10;
-
 
     public String getUsername() {
         return username;
