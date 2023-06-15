@@ -21,6 +21,10 @@ public class UmsAdminListResp {
 
     private Integer status;
 
+    private String roleName;
+
+    private Long roleId;
+
     public Long getId() {
         return id;
     }
@@ -34,7 +38,7 @@ public class UmsAdminListResp {
     }
 
     public void setUsername(String username) {
-        this.username = username == null ? null : username.trim();
+        this.username = username;
     }
 
     public String getIcon() {
@@ -42,7 +46,7 @@ public class UmsAdminListResp {
     }
 
     public void setIcon(String icon) {
-        this.icon = icon == null ? null : icon.trim();
+        this.icon = icon;
     }
 
     public String getEmail() {
@@ -50,7 +54,7 @@ public class UmsAdminListResp {
     }
 
     public void setEmail(String email) {
-        this.email = email == null ? null : email.trim();
+        this.email = email;
     }
 
     public String getNickName() {
@@ -58,7 +62,7 @@ public class UmsAdminListResp {
     }
 
     public void setNickName(String nickName) {
-        this.nickName = nickName == null ? null : nickName.trim();
+        this.nickName = nickName;
     }
 
     public String getNote() {
@@ -66,7 +70,7 @@ public class UmsAdminListResp {
     }
 
     public void setNote(String note) {
-        this.note = note == null ? null : note.trim();
+        this.note = note;
     }
 
     public Date getCreateTime() {
@@ -93,22 +97,36 @@ public class UmsAdminListResp {
         this.status = status;
     }
 
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    public Long getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
+    }
+
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", username=").append(username);
-        sb.append(", icon=").append(icon);
-        sb.append(", email=").append(email);
-        sb.append(", nickName=").append(nickName);
-        sb.append(", note=").append(note);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", loginTime=").append(loginTime);
-        sb.append(", status=").append(status);
-        sb.append("]");
-        return sb.toString();
+        return "UmsAdminListResp{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", icon='" + icon + '\'' +
+                ", email='" + email + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", note='" + note + '\'' +
+                ", createTime=" + createTime +
+                ", loginTime=" + loginTime +
+                ", status=" + status +
+                ", roleName='" + roleName + '\'' +
+                ", roleId=" + roleId +
+                '}';
     }
 }

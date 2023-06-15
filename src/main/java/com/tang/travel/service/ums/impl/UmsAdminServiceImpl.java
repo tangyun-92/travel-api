@@ -5,8 +5,8 @@ import com.tang.travel.exception.BusinessException;
 import com.tang.travel.exception.BusinessExceptionEnum;
 import com.tang.travel.mbg.mapper.UmsAdminMapper;
 import com.tang.travel.mbg.model.UmsAdmin;
-import com.tang.travel.mbg.model.UmsAdminExample;
 import com.tang.travel.mbg.model.UmsPermission;
+import com.tang.travel.model.dao.UmsAdminMapperDao;
 import com.tang.travel.model.dao.UmsPermissionMapperDao;
 import com.tang.travel.model.req.ums.UmsAdminListReq;
 import com.tang.travel.model.req.ums.UmsAdminLoginReq;
@@ -23,7 +23,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
@@ -35,6 +34,8 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 
     @Resource
     UmsAdminMapper umsAdminMapper;
+    @Resource
+    UmsAdminMapperDao umsAdminMapperDao;
     @Resource
     UmsPermissionMapperDao umsPermissionMapperDao;
     @Resource
@@ -51,16 +52,11 @@ public class UmsAdminServiceImpl implements UmsAdminService {
      */
     @Override
     public UmsAdmin getAdminByUsername(String username) {
-        UmsAdminExample umsAdminExample = new UmsAdminExample();
-        UmsAdminExample.Criteria criteria = umsAdminExample.createCriteria();
-        criteria.andUsernameEqualTo(username);
-
-        List<UmsAdmin> adminList = umsAdminMapper.selectByExample(umsAdminExample);
-        if (CollectionUtils.isEmpty(adminList)) {
-            return null;
-        } else {
-            return adminList.get(0);
+        UmsAdmin umsAdmin = umsAdminMapperDao.selectByName(username);
+        if (umsAdmin != null) {
+            return umsAdmin;
         }
+        return null;
     }
 
     /**
@@ -127,21 +123,11 @@ public class UmsAdminServiceImpl implements UmsAdminService {
      */
     @Override
     public PageBean list(UmsAdminListReq req) {
-        UmsAdminExample umsAdminExample = new UmsAdminExample();
-        UmsAdminExample.Criteria criteria = umsAdminExample.createCriteria();
-        // 用户名与昵称模糊查询
-        if (!ObjectUtils.isEmpty(req.getUsername())) {
-            criteria.andUsernameLike('%' + req.getUsername() + '%');
-        }
-        if (!ObjectUtils.isEmpty(req.getNickName())) {
-            criteria.andNickNameLike('%' + req.getNickName() + '%');
-        }
-
         PageHelper.startPage(req.getCurrent(), req.getPageSize());
 
-        List<UmsAdmin> umsAdminList = umsAdminMapper.selectByExample(umsAdminExample);
-        // 列表复制
-        List<UmsAdminListResp> list = CopyUtil.copyList(umsAdminList, UmsAdminListResp.class);
-        return new PageBean<>(list);
+        List<UmsAdminListResp> umsAdminList = umsAdminMapperDao.selectList(req);
+        return new PageBean<>(umsAdminList);
     }
+
+    public void assignRole() {}
 }

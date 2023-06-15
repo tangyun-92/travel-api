@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tang.travel.model.dao.UmsAdminMapperDao">
+    <resultMap id="BaseResultMap" type="com.tang.travel.mbg.model.UmsAdmin">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="icon" jdbcType="VARCHAR" property="icon"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="nick_name" jdbcType="VARCHAR" property="nickName"/>
+        <result column="note" jdbcType="VARCHAR" property="note"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="login_time" jdbcType="TIMESTAMP" property="loginTime"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id
+        , username, password, icon, email, nick_name, note, create_time, login_time, `status`
+    </sql>
+    <select id="selectByName" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from ums_admin
+        where username = #{username, jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectList" resultType="com.tang.travel.model.resp.ums.UmsAdminListResp"
+            parameterType="com.tang.travel.model.req.ums.UmsAdminListReq">
+        select a.id,
+               a.username,
+               a.icon,
+               a.email,
+               a.nick_name as nickName,
+               a.note,
+               a.create_time as createTime,
+               a.login_time  as loginTime,
+               a.`status`,
+               r.`name`      as roleName,
+               r.id          as roleId
+        from ums_admin as a
+                 left join ums_admin_role_relation as ar on ar.admin_id = a.id
+                 left join ums_role as r on r.id = ar.role_id
+    </select>
+</mapper>

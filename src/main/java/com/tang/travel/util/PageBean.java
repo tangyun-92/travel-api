@@ -17,7 +17,7 @@ public class PageBean<T> implements Serializable {
     private List<T> list;
 
     public PageBean(List<T> list) {
-        this(list, 5);
+        this(list, 8);
     }
 
     public PageBean(List<T> data, int navigatePages) {

@@ -12,7 +12,7 @@
         <property name="endingDelimiter" value="`"/>
 
         <!--覆盖生成XML文件-->
-        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>
         <!-- 生成的实体类添加toString()方法 -->
         <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
 
@@ -25,32 +25,39 @@
                         connectionURL="jdbc:mysql://127.0.0.1:3306/travel?useUnicode=true&amp;serverTimezone=Asia/Shanghai&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull"
                         userId="root"
                         password="12345678">
-            <property name="nullCatalogMeansCurrent" value="true" />
+            <property name="nullCatalogMeansCurrent" value="true"/>
         </jdbcConnection>
 
         <!-- Model类的位置 -->
         <javaModelGenerator targetProject="src\main\java"
                             targetPackage="com.tang.travel.mbg.model">
             <!-- 是否允许子包，即targetPackage.schemaName.tableName -->
-            <property name="enableSubPackages" value="true" />
+            <property name="enableSubPackages" value="true"/>
             <!-- 是否对类CHAR类型的列的数据进行trim操作 -->
             <property name="trimStrings" value="true"/>
             <!-- 建立的Model对象是否 不可改变，即生成的Model对象不会有 setter方法，只有构造方法 -->
-            <property name="immutable" value="false" />
+            <property name="immutable" value="false"/>
         </javaModelGenerator>
 
         <!-- mapper xml的位置 -->
         <sqlMapGenerator targetProject="src\main\resources"
                          targetPackage="com.tang.travel.mbg.mapper">
-            <property name="enableSubPackages" value="true" />
+            <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
         <!-- Dao类的位置 -->
         <javaClientGenerator targetPackage="com.tang.travel.mbg.mapper" targetProject="src/main/java" type="XMLMAPPER">
-            <property name="enableSubPackages" value="true" />
+            <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table tableName="ums_admin"/>
-        <table tableName="ums_permission"/>
+        <table tableName="ums_admin" enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false"
+               enableUpdateByExample="false" selectByExampleQueryId="false"/>
+        <table tableName="ums_permission" enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false"
+               enableUpdateByExample="false" selectByExampleQueryId="false"/>
+        <table tableName="ums_role" enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false"
+               enableUpdateByExample="false" selectByExampleQueryId="false"/>
     </context>
 </generatorConfiguration>

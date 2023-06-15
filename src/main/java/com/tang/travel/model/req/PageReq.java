@@ -10,6 +10,8 @@ public class PageReq {
     @ApiModelProperty(value = "每页显示条数", name = "pageSize", dataType = "Integer")
     private Integer pageSize = 10;
 
+    private static final long serialVersionUID = 1L;
+
     public Integer getCurrent() {
         return current;
     }
@@ -25,6 +27,7 @@ public class PageReq {
     public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
     }
+
 
     @Override
     public String toString() {
