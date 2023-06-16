@@ -3,9 +3,11 @@ package com.tang.travel.service.ums.impl;
 import com.github.pagehelper.PageHelper;
 import com.tang.travel.exception.BusinessException;
 import com.tang.travel.exception.BusinessExceptionEnum;
+import com.tang.travel.mbg.mapper.UmsAdminLoginLogMapper;
 import com.tang.travel.mbg.mapper.UmsAdminMapper;
 import com.tang.travel.mbg.mapper.UmsAdminRoleRelationMapper;
 import com.tang.travel.mbg.model.UmsAdmin;
+import com.tang.travel.mbg.model.UmsAdminLoginLog;
 import com.tang.travel.mbg.model.UmsAdminRoleRelation;
 import com.tang.travel.mbg.model.UmsPermission;
 import com.tang.travel.model.dao.UmsAdminMapperDao;
@@ -20,6 +22,7 @@ import com.tang.travel.service.ums.UmsAdminService;
 import com.tang.travel.util.CopyUtil;
 import com.tang.travel.util.JwtTokenUtil;
 import com.tang.travel.util.PageBean;
+import com.tang.travel.util.RequestUtil;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,8 +32,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 
@@ -53,6 +59,8 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     private PasswordEncoder passwordEncoder;
     @Resource
     private JwtTokenUtil jwtTokenUtil;
+    @Resource
+    UmsAdminLoginLogMapper umsAdminLoginLogMapper;
 
     /**
      * 后台-根据用户名查询指定用户详细信息
@@ -119,6 +127,9 @@ public class UmsAdminServiceImpl implements UmsAdminService {
             UmsAdmin umsAdminDB = getAdminByUsername(req.getUsername());
             umsAdminDB.setLoginTime(new Date());
             umsAdminMapper.updateByPrimaryKeySelective(umsAdminDB);
+
+            // 往登录日志表中插入数据
+            insertLoginLog(umsAdminDB);
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -198,6 +209,21 @@ public class UmsAdminServiceImpl implements UmsAdminService {
                 umsAdminRoleRelationMapper.insert(roleRelation);
             }
         }
+    }
+
+    /**
+     * 添加登录日志
+     * @param umsAdmin
+     */
+    public void insertLoginLog(UmsAdmin umsAdmin) {
+        UmsAdminLoginLog loginLog = new UmsAdminLoginLog();
+        loginLog.setAdminId(umsAdmin.getId());
+        loginLog.setCreateTime(new Date());
+
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+        loginLog.setIp(RequestUtil.getRequestIp(request));
+        umsAdminLoginLogMapper.insert(loginLog);
     }
 
 }
