@@ -9,6 +9,8 @@ public enum BusinessExceptionEnum {
     TOKEN_LOSE_EFFICACY("暂未登录或token已过期"),
     NOT_AUTH("没有相关权限，请联系管理员"),
     WRONG_PASSWORD("用户名或密码错误"),
+    MKDIR_FAILED("文件夹创建失败"),
+    UPLOAD_FAILED("上传失败"),
     NAME_EXIST("该名称已存在");
 
     private String msg;
