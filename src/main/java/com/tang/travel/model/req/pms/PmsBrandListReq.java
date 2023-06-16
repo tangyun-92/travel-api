@@ -5,16 +5,16 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class PmsBrandListReq extends PageReq {
 
-    @ApiModelProperty(value = "品牌名称", name = "name", dataType = "String")
+    @ApiModelProperty(value = "品牌名称")
     private String name;
 
-    @ApiModelProperty(value = "首字母", name = "firstLetter", dataType = "String")
+    @ApiModelProperty(value = "首字母")
     private String firstLetter;
 
-    @ApiModelProperty(value = "是否为品牌制造商：0->不是；1->是", name = "factoryStatus", dataType = "Integer")
+    @ApiModelProperty(value = "是否为品牌制造商：0->不是；1->是")
     private Integer factoryStatus;
 
-    @ApiModelProperty(value = "是否显示：0->不显示；1->显示", name = "showStatus", dataType = "Integer")
+    @ApiModelProperty(value = "是否显示：0->不显示；1->显示")
     private Integer showStatus;
 
     public String getName() {

@@ -176,7 +176,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
      * @param ids
      */
     @Override
-    public void deleteUser(Integer[] ids) {
+    public void deleteUser(Long[] ids) {
         umsAdminMapperDao.batchDelete(ids);
     }
 

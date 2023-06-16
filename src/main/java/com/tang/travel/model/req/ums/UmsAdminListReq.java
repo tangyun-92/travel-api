@@ -5,13 +5,13 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class UmsAdminListReq extends PageReq {
 
-    @ApiModelProperty(value = "用户名", name = "username", dataType = "String")
+    @ApiModelProperty(value = "用户名")
     private String username;
 
-    @ApiModelProperty(value = "昵称", name = "nickName", dataType = "String")
+    @ApiModelProperty(value = "昵称")
     private String nickName;
 
-    @ApiModelProperty(value = "帐号启用状态：0->禁用；1->启用", name = "status", dataType = "Integer")
+    @ApiModelProperty(value = "帐号启用状态：0->禁用；1->启用")
     private Integer status;
 
     public String getUsername() {

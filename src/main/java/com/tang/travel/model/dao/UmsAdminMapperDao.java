@@ -15,5 +15,5 @@ public interface UmsAdminMapperDao {
 
     List<UmsAdminListResp> selectList(@Param("query") UmsAdminListReq query);
 
-    int batchDelete(@Param("ids") Integer[] ids);
+    int batchDelete(@Param("ids") Long[] ids);
 }

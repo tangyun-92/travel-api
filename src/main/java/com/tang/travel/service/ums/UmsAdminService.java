@@ -23,7 +23,7 @@ public interface UmsAdminService {
 
     void saveUser(UmsAdminSaveReq req);
 
-    void deleteUser(Integer[] ids);
+    void deleteUser(Long[] ids);
 
     void assignRole(Long adminId, List<Long> roleIds);
 }

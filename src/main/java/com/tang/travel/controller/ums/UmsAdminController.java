@@ -96,7 +96,7 @@ public class UmsAdminController {
     @ApiOperation("后台-删除用户")
     @DeleteMapping("/user/delete")
     @PreAuthorize("hasAuthority('ums:admin:delete')")
-    public ApiRestResponse deleteUser(@RequestParam Integer[] ids) {
+    public ApiRestResponse deleteUser(@RequestParam Long[] ids) {
         umsAdminService.deleteUser(ids);
         return ApiRestResponse.success();
     }

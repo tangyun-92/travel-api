@@ -10,23 +10,23 @@ public class UmsAdminSaveReq {
     private Long id;
 
     @NotEmpty(message = "用户名不能为空")
-    @ApiModelProperty(value = "用户名", name = "username", dataType = "String", required = true)
+    @ApiModelProperty(value = "用户名", required = true)
     private String username;
 
-    @ApiModelProperty(value = "头像", name = "icon", dataType = "String")
+    @ApiModelProperty(value = "头像")
     private String icon;
 
-    @ApiModelProperty(value = "邮箱", name = "email", dataType = "String")
+    @ApiModelProperty(value = "邮箱")
     private String email;
 
     @NotEmpty(message = "昵称不能为空")
-    @ApiModelProperty(value = "昵称", name = "nickName", dataType = "String", required = true)
+    @ApiModelProperty(value = "昵称", required = true)
     private String nickName;
 
-    @ApiModelProperty(value = "备注信息", name = "note", dataType = "String")
+    @ApiModelProperty(value = "备注信息")
     private String note;
 
-    @ApiModelProperty(value = "帐号启用状态：0->禁用；1->启用", name = "status", dataType = "String")
+    @ApiModelProperty(value = "帐号启用状态：0->禁用；1->启用")
     private Integer status;
 
     public Long getId() {
