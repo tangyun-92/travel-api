@@ -104,7 +104,7 @@ public class UmsAdminController {
     @ApiOperation("后台-分配角色")
     @PostMapping("/user/assignRole")
     @PreAuthorize("hasAuthority('ums:admin:assignRole')")
-    public ApiRestResponse assignRole(@RequestParam Long adminId, @RequestParam  List<Long> roleIds) {
+    public ApiRestResponse assignRole(@RequestParam Long adminId, @RequestParam List<Long> roleIds) {
         umsAdminService.assignRole(adminId, roleIds);
         return ApiRestResponse.success();
     }
