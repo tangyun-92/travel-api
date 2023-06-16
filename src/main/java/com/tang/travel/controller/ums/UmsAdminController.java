@@ -3,6 +3,7 @@ package com.tang.travel.controller.ums;
 import com.tang.travel.common.ApiRestResponse;
 import com.tang.travel.exception.BusinessExceptionEnum;
 import com.tang.travel.mbg.model.UmsAdmin;
+import com.tang.travel.mbg.model.UmsAdminRoleRelation;
 import com.tang.travel.mbg.model.UmsPermission;
 import com.tang.travel.model.req.ums.UmsAdminListReq;
 import com.tang.travel.model.req.ums.UmsAdminLoginReq;
@@ -107,5 +108,13 @@ public class UmsAdminController {
     public ApiRestResponse assignRole(@RequestParam Long adminId, @RequestParam List<Long> roleIds) {
         umsAdminService.assignRole(adminId, roleIds);
         return ApiRestResponse.success();
+    }
+
+    @ApiOperation("后台-根据用户id获取角色id列表")
+    @GetMapping("/user/getUserRoleListByAdminId")
+    @PreAuthorize("hasAuthority('ums:admin:assignRole')")
+    public ApiRestResponse getUserRoleListByAdminId(Long adminId) {
+        List<UmsAdminRoleRelation> roleList = umsAdminService.getUserRoleListByAdminId(adminId);
+        return ApiRestResponse.success(roleList);
     }
 }

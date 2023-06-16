@@ -226,4 +226,15 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         umsAdminLoginLogMapper.insert(loginLog);
     }
 
+    /**
+     * 根据用户id获取角色id列表
+     * @param adminId
+     * @return
+     */
+    @Override
+    public List<UmsAdminRoleRelation> getUserRoleListByAdminId(Long adminId) {
+        List<UmsAdminRoleRelation> roleRelationList = umsAdminRoleRelationMapperDao.selectRoleListByAdminId(adminId);
+        return roleRelationList;
+    }
+
 }

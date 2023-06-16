@@ -1,6 +1,7 @@
 package com.tang.travel.service.ums;
 
 import com.tang.travel.mbg.model.UmsAdmin;
+import com.tang.travel.mbg.model.UmsAdminRoleRelation;
 import com.tang.travel.mbg.model.UmsPermission;
 import com.tang.travel.model.req.ums.UmsAdminListReq;
 import com.tang.travel.model.req.ums.UmsAdminLoginReq;
@@ -26,4 +27,6 @@ public interface UmsAdminService {
     void deleteUser(Long[] ids);
 
     void assignRole(Long adminId, List<Long> roleIds);
+
+    List<UmsAdminRoleRelation> getUserRoleListByAdminId(Long adminId);
 }
