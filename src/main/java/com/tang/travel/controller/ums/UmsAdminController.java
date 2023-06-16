@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@Api(tags = "user-management-ums")
+@Api(tags = "user-management-admin")
 @RequestMapping("/admin")
 public class UmsAdminController {
 

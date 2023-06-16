@@ -24,7 +24,7 @@ public class PmsBrandController {
     @ApiOperation("后台-品牌列表")
     @GetMapping("/list")
     @PreAuthorize("hasAuthority('pms:brand:read')")
-    public ApiRestResponse getUserList(PmsBrandListReq req) {
+    public ApiRestResponse getBrandList(PmsBrandListReq req) {
         PageBean list = pmsBrandService.getBrandList(req);
         return ApiRestResponse.success(list);
     }
@@ -32,7 +32,7 @@ public class PmsBrandController {
     @ApiOperation("后台-新增/更新品牌")
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('pms:brand:save')")
-    public ApiRestResponse saveUser(@Valid @RequestBody PmsBrandSaveReq req) {
+    public ApiRestResponse saveBrand(@Valid @RequestBody PmsBrandSaveReq req) {
         pmsBrandService.saveBrand(req);
         return ApiRestResponse.success();
     }
