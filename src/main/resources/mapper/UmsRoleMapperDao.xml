@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tang.travel.model.dao.UmsRoleMapperDao">
+    <resultMap id="BaseResultMap" type="com.tang.travel.mbg.model.UmsRole">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="admin_count" jdbcType="INTEGER" property="adminCount"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="sort" jdbcType="INTEGER" property="sort"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id
+        , `name`, description, admin_count, create_time, `status`, sort
+    </sql>
+
+    <select id="selectList" resultMap="BaseResultMap" parameterType="com.tang.travel.model.req.ums.UmsRoleListReq">
+        select
+        <include refid="Base_Column_List"/>
+        from ums_role
+        <where>
+            <if test="query.name != null">
+                and name like concat('%', #{query.name} ,'%')
+            </if>
+            <if test="query.status != null">
+                and status = #{query.status}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectByName" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from ums_role
+        where name = #{name}
+    </select>
+
+    <delete id="batchDelete">
+        delete from ums_role
+        where id in
+        <foreach collection="ids" open="(" close=")" item="id" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

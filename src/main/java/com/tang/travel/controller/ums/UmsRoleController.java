@@ -1,0 +1,49 @@
+package com.tang.travel.controller.ums;
+
+import com.tang.travel.common.ApiRestResponse;
+import com.tang.travel.model.req.pms.PmsBrandSaveReq;
+import com.tang.travel.model.req.ums.UmsRoleListReq;
+import com.tang.travel.model.req.ums.UmsRoleSaveReq;
+import com.tang.travel.service.ums.UmsRoleService;
+import com.tang.travel.util.PageBean;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import javax.validation.Valid;
+
+@RestController
+@Api(tags = "role-management-admin")
+@RequestMapping("/admin/role")
+public class UmsRoleController {
+
+    @Resource
+    UmsRoleService umsRoleService;
+
+    @ApiOperation("后台-角色列表")
+    @GetMapping("/list")
+    @PreAuthorize("hasAuthority('ums:role:read')")
+    public ApiRestResponse getRoleList(UmsRoleListReq req) {
+        PageBean list = umsRoleService.getRoleList(req);
+        return ApiRestResponse.success(list);
+    }
+
+    @ApiOperation("后台-新增/更新角色")
+    @PostMapping("/save")
+    @PreAuthorize("hasAnyAuthority('ums:role:save')")
+    public ApiRestResponse saveRole(@Valid @RequestBody UmsRoleSaveReq req) {
+        umsRoleService.saveRole(req);
+        return ApiRestResponse.success();
+    }
+
+    @ApiOperation("后台-删除角色")
+    @DeleteMapping("/delete")
+    @PreAuthorize("hasAuthority('ums:role:delete')")
+    public ApiRestResponse deleteRole(@RequestParam Long[] ids) {
+        umsRoleService.delete(ids);
+        return ApiRestResponse.success();
+    }
+
+}
