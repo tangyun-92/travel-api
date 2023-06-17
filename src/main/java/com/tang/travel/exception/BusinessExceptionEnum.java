@@ -11,6 +11,7 @@ public enum BusinessExceptionEnum {
     WRONG_PASSWORD("用户名或密码错误"),
     MKDIR_FAILED("文件夹创建失败"),
     UPLOAD_FAILED("上传失败"),
+    USER_STOP("该用户已被禁用，请联系管理员"),
     NAME_EXIST("该名称已存在");
 
     private String msg;

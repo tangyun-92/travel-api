@@ -123,8 +123,12 @@ public class UmsAdminServiceImpl implements UmsAdminService {
             if (!passwordEncoder.matches(req.getPassword(), userDetails.getPassword())) {
                 throw new BusinessException(BusinessExceptionEnum.WRONG_PASSWORD);
             }
-            // 更新最后一次登录时间
             UmsAdmin umsAdminDB = getAdminByUsername(req.getUsername());
+            // 用户状态为禁用，返回异常
+            if (umsAdminDB.getStatus() == 0) {
+                throw new BusinessException(BusinessExceptionEnum.USER_STOP);
+            }
+            // 更新最后一次登录时间
             umsAdminDB.setLoginTime(new Date());
             umsAdminMapper.updateByPrimaryKeySelective(umsAdminDB);
 
