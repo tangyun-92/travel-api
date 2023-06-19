@@ -47,4 +47,15 @@
             pr.type = 1
           AND pr.admin_id = #{adminId}
     </select>
+
+    <select id="getAllList" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" />
+        from ums_permission
+    </select>
+
+    <select id="selectPermissionsByParentId" parameterType="int" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" />
+        from ums_permission
+        where pid = #{parentId}
+    </select>
 </mapper>

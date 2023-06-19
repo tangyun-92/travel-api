@@ -73,4 +73,8 @@ public class UmsRoleServiceImpl implements UmsRoleService {
         umsRoleMapperDao.batchDelete(ids);
     }
 
+    public void assignAuth(Long roleId) {
+
+    }
+
 }
