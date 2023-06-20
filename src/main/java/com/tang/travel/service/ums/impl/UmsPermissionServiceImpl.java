@@ -20,21 +20,21 @@ public class UmsPermissionServiceImpl implements UmsPermissionService {
 
     @Override
     public List<UmsPermissionAllListResp> getAllList(Integer parentId) {
-        ArrayList<UmsPermissionAllListResp> categoryVOList = new ArrayList<>();
-        recursivelyFindCategories(categoryVOList, parentId);
-        return categoryVOList;
+        ArrayList<UmsPermissionAllListResp> permissionListResp = new ArrayList<>();
+        recursivelyFindCategories(permissionListResp, parentId);
+        return permissionListResp;
     }
 
-    private void recursivelyFindCategories(List<UmsPermissionAllListResp> categoryVOList, Integer parentId) {
+    private void recursivelyFindCategories(List<UmsPermissionAllListResp> permissionListResp, Integer parentId) {
         // 递归获取所有子类别，并组合成为一个“目录树”
-        List<UmsPermission> categoryList = umsPermissionMapperDao.selectPermissionsByParentId(parentId);
-        if (!CollectionUtils.isEmpty(categoryList)) {
-            for (int i = 0; i < categoryList.size(); i++) {
-                UmsPermission category =  categoryList.get(i);
-                UmsPermissionAllListResp categoryVO = new UmsPermissionAllListResp();
-                BeanUtils.copyProperties(category, categoryVO);
-                categoryVOList.add(categoryVO);
-                recursivelyFindCategories(categoryVO.getChildren(), categoryVO.getId());
+        List<UmsPermission> permissionList = umsPermissionMapperDao.selectPermissionsByParentId(parentId);
+        if (!CollectionUtils.isEmpty(permissionList)) {
+            for (int i = 0; i < permissionList.size(); i++) {
+                UmsPermission permission =  permissionList.get(i);
+                UmsPermissionAllListResp permissionResp = new UmsPermissionAllListResp();
+                BeanUtils.copyProperties(permission, permissionResp);
+                permissionListResp.add(permissionResp);
+                recursivelyFindCategories(permissionResp.getChildren(), permissionResp.getId());
             }
         }
     }

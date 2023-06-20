@@ -1,7 +1,6 @@
 package com.tang.travel.model.dao;
 
 import com.tang.travel.mbg.model.UmsPermission;
-import com.tang.travel.model.resp.ums.UmsPermissionAllListResp;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -13,5 +12,5 @@ public interface UmsPermissionMapperDao {
 
     List<UmsPermission> getAllList();
 
-    List<UmsPermission> selectPermissionsByParentId(Integer parentId);
+    List<UmsPermission> selectPermissionsByParentId(@Param("parentId") Integer parentId);
 }

@@ -3,9 +3,9 @@ package com.tang.travel.mbg.model;
 import java.util.Date;
 
 public class UmsPermission {
-    private Long id;
+    private Integer id;
 
-    private Long pid;
+    private Integer pid;
 
     private String name;
 
@@ -23,19 +23,19 @@ public class UmsPermission {
 
     private Integer sort;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public Long getPid() {
+    public Integer getPid() {
         return pid;
     }
 
-    public void setPid(Long pid) {
+    public void setPid(Integer pid) {
         this.pid = pid;
     }
 
