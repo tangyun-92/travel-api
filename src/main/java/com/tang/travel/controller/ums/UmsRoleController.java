@@ -1,7 +1,7 @@
 package com.tang.travel.controller.ums;
 
 import com.tang.travel.common.ApiRestResponse;
-import com.tang.travel.model.req.pms.PmsBrandSaveReq;
+import com.tang.travel.mbg.model.UmsRolePermissionRelation;
 import com.tang.travel.model.req.ums.UmsRoleListReq;
 import com.tang.travel.model.req.ums.UmsRoleSaveReq;
 import com.tang.travel.service.ums.UmsRoleService;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @Api(tags = "role-management-admin")
@@ -43,6 +44,22 @@ public class UmsRoleController {
     @PreAuthorize("hasAuthority('ums:role:delete')")
     public ApiRestResponse deleteRole(@RequestParam Long[] ids) {
         umsRoleService.delete(ids);
+        return ApiRestResponse.success();
+    }
+
+    @ApiOperation("后台-根据角色id，获取该角色拥有的所有权限列表")
+    @GetMapping("/currentPermissionList")
+    @PreAuthorize("hasAuthority('ums:role:assignAuth')")
+    public ApiRestResponse getCurrentPermissionListByRoleId(@RequestParam Integer roleId) {
+        List<UmsRolePermissionRelation> permissionList = umsRoleService.getCurrentPermissionListByRoleId(roleId);
+        return ApiRestResponse.success(permissionList);
+    }
+
+    @ApiOperation("后台-分配角色权限")
+    @PostMapping("/assignAuth")
+    @PreAuthorize("hasAuthority('ums:role:assignAuth')")
+    public ApiRestResponse assignRoleAuth(@RequestParam Long roleId, @RequestParam List<Long> permissionIds) {
+        umsRoleService.assignAuth(roleId, permissionIds);
         return ApiRestResponse.success();
     }
 

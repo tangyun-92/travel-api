@@ -28,5 +28,4 @@ public class UmsPermissionController {
         List<UmsPermissionAllListResp> permissionList = umsPermissionService.getAllList(0);
         return ApiRestResponse.success(permissionList);
     }
-
 }

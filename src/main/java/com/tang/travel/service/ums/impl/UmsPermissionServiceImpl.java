@@ -18,6 +18,11 @@ public class UmsPermissionServiceImpl implements UmsPermissionService {
     @Resource
     UmsPermissionMapperDao umsPermissionMapperDao;
 
+    /**
+     * 根据pid获取所有权限列表树
+     * @param parentId
+     * @return
+     */
     @Override
     public List<UmsPermissionAllListResp> getAllList(Integer parentId) {
         ArrayList<UmsPermissionAllListResp> permissionListResp = new ArrayList<>();
@@ -38,5 +43,4 @@ public class UmsPermissionServiceImpl implements UmsPermissionService {
             }
         }
     }
-
 }
